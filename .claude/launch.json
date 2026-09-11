@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "knowledge-atlas",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "XBG_API_PORT=4178 XBG_WEB_ORIGIN=http://127.0.0.1:5174 npx concurrently -k \"npx tsx watch src/server/index.ts\" \"npx vite --host 127.0.0.1 --port 5174\""
+      ],
+      "port": 5174
+    }
+  ]
+}

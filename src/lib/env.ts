@@ -38,7 +38,7 @@ export const config = {
   modelsDir: resolveLocal(process.env.XBG_MODELS ?? '', './data/models'),
   documentsDir: resolveLocal(process.env.XBG_DOCUMENTS ?? '', './data/documents'),
   anthropicApiKey: process.env.ANTHROPIC_API_KEY?.trim() || '',
-  anthropicModel: process.env.ANTHROPIC_MODEL?.trim() || 'claude-opus-5',
+  anthropicModel: process.env.ANTHROPIC_MODEL?.trim() || 'claude-haiku-4-5',
   xaiApiKey: process.env.XAI_API_KEY?.trim() || '',
   xaiModel: process.env.XAI_MODEL?.trim() || 'grok-4.6',
   xaiBaseUrl: (process.env.XAI_BASE_URL?.trim() || 'https://api.x.ai/v1').replace(/\/$/, ''),

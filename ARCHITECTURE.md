@@ -283,7 +283,7 @@ Copy `.env.example` → `.env` (gitignored).
 | `XBG_ASSISTANT_PROVIDER` | `auto` | Assistant chat: `auto`, `xai`, `claude`, `codex`, `grok`, `none` |
 | `XAI_API_KEY` / `XAI_MODEL` | — / `grok-4.6` | xAI API for assistant chat + distill |
 | `ANTHROPIC_API_KEY` | — | Optional link/media LLM enrichment |
-| `ANTHROPIC_MODEL` | `claude-opus-5` | Link summaries + image descriptions (`claude-haiku-4-5` for cheaper bulk runs) |
+| `ANTHROPIC_MODEL` | `claude-haiku-4-5` | Link summaries + image descriptions |
 
 Agent CLIs (`claude`, `codex`, `grok`) resolve from `PATH`; `~/.grok/bin` is added for Grok Build installs (`cliEnv` in `src/lib/llm-cli.ts`).
 

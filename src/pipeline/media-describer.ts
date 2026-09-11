@@ -120,9 +120,7 @@ async function describeWithAnthropic(row: MediaRow): Promise<VisionDescription |
   const client = new Anthropic({ apiKey: config.anthropicApiKey })
   const response = await client.messages.create({
     model: config.anthropicModel,
-    // Thinking counts toward max_tokens on current models; low effort suits short descriptions.
     max_tokens: 16000,
-    output_config: { effort: 'low' },
     messages: [
       {
         role: 'user',

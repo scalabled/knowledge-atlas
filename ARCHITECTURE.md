@@ -218,7 +218,7 @@ Caches in `explore.ts` invalidate via `invalidateExploreCaches()` after writes.
 2. Prompt asserts context is **complete**; tools disabled for answer  
 3. Providers:
    - **grok** (default): `grok --prompt-file … --tools '' --max-turns 12`  
-   - **claude**: `claude -p --model haiku`  
+   - **claude**: `claude -p --model claude-opus-5` (`CLAUDE_CLI_MODEL` in `src/lib/llm-cli.ts`)  
    - **codex**: `codex exec …`  
 4. **Related X + web**: `POST /api/ask/related` with rendered answer → Grok **with** `web_search,web_fetch` + `--always-approve`  
 5. UI: Markdown (`react-markdown` + GFM); provider preference in `localStorage` key `atlas-ask-provider`
@@ -283,7 +283,7 @@ Copy `.env.example` → `.env` (gitignored).
 | `XBG_ASSISTANT_PROVIDER` | `auto` | Assistant chat: `auto`, `xai`, `claude`, `codex`, `grok`, `none` |
 | `XAI_API_KEY` / `XAI_MODEL` | — / `grok-4.6` | xAI API for assistant chat + distill |
 | `ANTHROPIC_API_KEY` | — | Optional link/media LLM enrichment |
-| `ANTHROPIC_MODEL` | haiku | Vision/summarize model |
+| `ANTHROPIC_MODEL` | `claude-opus-5` | Link summaries + image descriptions (`claude-haiku-4-5` for cheaper bulk runs) |
 
 Agent CLIs (`claude`, `codex`, `grok`) resolve from `PATH`; `~/.grok/bin` is added for Grok Build installs (`cliEnv` in `src/lib/llm-cli.ts`).
 

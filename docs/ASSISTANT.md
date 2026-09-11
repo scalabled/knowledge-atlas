@@ -39,7 +39,7 @@ Answers cite memories as `[n]` and are instructed never to invent items.
 | Provider | How it answers |
 |---|---|
 | `xai` | xAI Responses API with tools (`search_library`, `get_timeline`, `get_themes`, `get_ideas`, `save_insight`) for up to four rounds |
-| `claude` | `claude -p --model haiku` with the retrieval pack over stdin, tools disabled |
+| `claude` | `claude -p --model claude-opus-5` with the retrieval pack over stdin, tools disabled |
 | `codex` | `codex exec` in a read-only sandbox, prompt over stdin |
 | `grok` | Grok Build CLI with a prompt file, tools and web search disabled |
 

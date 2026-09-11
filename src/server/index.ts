@@ -6,7 +6,7 @@ import path from 'node:path'
 import { initDb, openDb } from '../lib/db'
 import { config, rootDir } from '../lib/env'
 import { parseJson, stableId } from '../lib/hash'
-import { runCli, withGrokPromptFile } from '../lib/llm-cli'
+import { CLAUDE_CLI_MODEL, runCli, withGrokPromptFile } from '../lib/llm-cli'
 import { parseEmbedding } from '../lib/semantic'
 import type { GraphEdgeDto, GraphNodeDto, SearchResult } from '../lib/types'
 import { buildFtsQuery, rebuildFts } from '../pipeline/store'
@@ -829,7 +829,7 @@ app.post('/api/ask', async (req, res) => {
           'exec', '--skip-git-repo-check', '--sandbox', 'read-only', '--color', 'never', '-C', rootDir, '-',
         ], `${prompt}\n\n<<<END OF COMPLETE LIBRARY CONTEXT — answer now>>>`)
         : await runCli('claude', [
-          '-p', '--model', 'haiku', '--no-session-persistence', '--output-format', 'text',
+          '-p', '--model', CLAUDE_CLI_MODEL, '--no-session-persistence', '--output-format', 'text',
         ], `${prompt}\n\n<<<END OF COMPLETE LIBRARY CONTEXT — answer now>>>`)
     res.json({ answer, provider: normalized, sources: hits, concepts: brain.concepts, bridges: brain.bridges })
   } catch (error) { res.status(500).json({ error: error instanceof Error ? error.message : String(error) }) }

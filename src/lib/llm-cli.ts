@@ -7,6 +7,9 @@ import { rootDir } from './env'
 /** Local agent CLIs that can answer a one-shot prompt. */
 export type CliProvider = 'claude' | 'codex' | 'grok'
 
+/** Pinned by ID: the CLI's `opus` alias can lag behind the newest model on older Claude Code installs. */
+export const CLAUDE_CLI_MODEL = 'claude-opus-5'
+
 /** PATH plus the Grok Build install dir, so `grok` resolves when installed via its script. */
 export function cliEnv(): NodeJS.ProcessEnv {
   const grokBin = path.join(os.homedir(), '.grok', 'bin')
@@ -72,5 +75,5 @@ export function runCliPrompt(provider: CliProvider, prompt: string, timeoutMs = 
       'exec', '--skip-git-repo-check', '--sandbox', 'read-only', '--color', 'never', '-C', rootDir, '-',
     ], prompt, timeoutMs)
   }
-  return runCli('claude', ['-p', '--model', 'haiku', '--no-session-persistence', '--output-format', 'text'], prompt, timeoutMs)
+  return runCli('claude', ['-p', '--model', CLAUDE_CLI_MODEL, '--no-session-persistence', '--output-format', 'text'], prompt, timeoutMs)
 }

@@ -1,3 +1,4 @@
+import Anthropic from '@anthropic-ai/sdk'
 import type Database from 'better-sqlite3'
 import { config } from '../lib/env'
 import { safeJson } from '../lib/hash'
@@ -61,7 +62,14 @@ function chooseMediaUrl(row: MediaRow): string {
   return row.thumbnailUrl || row.url
 }
 
-async function downloadImage(url: string): Promise<{ mediaType: string; data: string } | null> {
+const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'] as const
+type ImageMediaType = typeof IMAGE_TYPES[number]
+
+function isImageType(value: string): value is ImageMediaType {
+  return (IMAGE_TYPES as readonly string[]).includes(value)
+}
+
+async function downloadImage(url: string): Promise<{ mediaType: ImageMediaType; data: string } | null> {
   const response = await fetch(url, {
     headers: {
       'user-agent': 'x-bookmark-graph/0.1 media-describer',
@@ -71,7 +79,7 @@ async function downloadImage(url: string): Promise<{ mediaType: string; data: st
   if (!response.ok) return null
 
   const mediaType = (response.headers.get('content-type') ?? '').split(';')[0].trim().toLowerCase()
-  if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(mediaType)) return null
+  if (!isImageType(mediaType)) return null
 
   const bytes = Buffer.from(await response.arrayBuffer())
   if (bytes.byteLength === 0 || bytes.byteLength > 5_000_000) return null
@@ -109,35 +117,24 @@ async function describeWithAnthropic(row: MediaRow): Promise<VisionDescription |
     `Bookmark context: ${row.bookmarkText.slice(0, 900)}`,
   ].join('\n')
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'anthropic-version': '2023-06-01',
-      'x-api-key': config.anthropicApiKey,
-    },
-    body: JSON.stringify({
-      model: config.anthropicModel,
-      max_tokens: 350,
-      temperature: 0,
-      messages: [
-        {
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: image.mediaType, data: image.data } },
-            { type: 'text', text: prompt },
-          ],
-        },
-      ],
-    }),
+  const client = new Anthropic({ apiKey: config.anthropicApiKey })
+  const response = await client.messages.create({
+    model: config.anthropicModel,
+    // Thinking counts toward max_tokens on current models; low effort suits short descriptions.
+    max_tokens: 16000,
+    output_config: { effort: 'low' },
+    messages: [
+      {
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: image.mediaType, data: image.data } },
+          { type: 'text', text: prompt },
+        ],
+      },
+    ],
   })
 
-  if (!response.ok) {
-    throw new Error(`Anthropic vision request failed: ${response.status} ${await response.text()}`)
-  }
-
-  const json = await response.json() as { content?: Array<{ type?: string; text?: string }> }
-  const text = json.content?.filter((item) => item.type === 'text').map((item) => item.text ?? '').join('\n').trim() ?? ''
+  const text = response.content.map((block) => (block.type === 'text' ? block.text : '')).join('\n').trim()
   return text ? parseDescription(text) : null
 }
 

@@ -421,7 +421,9 @@ Return:
 
   const message = await client.messages.create({
     model: config.anthropicModel,
-    max_tokens: 3000,
+    // Thinking counts toward max_tokens on current models; low effort suits summarization.
+    max_tokens: 16000,
+    output_config: { effort: 'low' },
     messages: [{ role: 'user', content: prompt }],
   })
 

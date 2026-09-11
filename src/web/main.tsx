@@ -757,7 +757,7 @@ function App({ onOpenAssistant }: { onOpenAssistant: () => void }) {
             aria-label="Answer provider"
           >
             <option value="grok">Grok Build CLI</option>
-            <option value="claude">Claude Haiku</option>
+            <option value="claude">Claude Opus</option>
             <option value="codex">Codex</option>
           </select>
           <button onClick={ask} disabled={!question.trim() || askLoading || relatedLoading}>
@@ -771,7 +771,7 @@ function App({ onOpenAssistant }: { onOpenAssistant: () => void }) {
             <div>
               <strong>Querying your library…</strong>
               <span>
-                {provider === 'grok' ? 'Grok Build CLI' : provider === 'codex' ? 'Codex' : 'Claude Haiku'}
+                {provider === 'grok' ? 'Grok Build CLI' : provider === 'codex' ? 'Codex' : 'Claude Opus'}
                 {' · hybrid retrieval + answer'}
               </span>
             </div>

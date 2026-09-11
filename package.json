@@ -34,7 +34,7 @@
     "test": "tsx --test src/web/layout/unified-layout.test.ts src/server/second-brain.test.ts src/assistant/assistant.test.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.78.0",
+    "@anthropic-ai/sdk": "^0.125.0",
     "@huggingface/transformers": "^4.2.0",
     "@mozilla/readability": "^0.6.0",
     "@vitejs/plugin-react": "^5.1.2",
